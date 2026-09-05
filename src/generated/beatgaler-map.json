@@ -1,0 +1,79 @@
+{
+  "schemaVersion": 1,
+  "generated": false,
+  "generatedAt": null,
+  "repositoryPath": null,
+  "sourceSha": "5108991a9dd35d63e888d306d84d089ff5a128e7",
+  "sourceBranch": "issue-97-definitive-web-startup-playback",
+  "sourceRef": "BeatGaler issue-97-definitive-web-startup-playback @ 5108991a9dd3 · bootstrap snapshot",
+  "views": {
+    "beatgaler": {
+      "id": "beatgaler",
+      "title": "BeatGaler",
+      "kind": "overview",
+      "nodes": [
+        { "id": "beatgaler", "x": 0, "y": 0, "label": "BeatGaler", "subtitle": "Current code reality", "level": "product", "details": "Only systems proven by the current mapping appear here." },
+        { "id": "playback", "x": 0, "y": 190, "label": "Playback", "subtitle": "How a beat becomes audible", "level": "system", "details": "Current Web playback implementation.", "targetView": "playback" }
+      ],
+      "edges": [
+        { "id": "e-beatgaler-playback", "source": "beatgaler", "target": "playback", "kind": "relationship" }
+      ]
+    },
+    "playback": {
+      "id": "playback",
+      "title": "BeatGaler / Playback",
+      "kind": "relationships",
+      "nodes": [
+        { "id": "playback", "x": 360, "y": 300, "label": "Playback", "subtitle": "Turn a Play request into continuous audio", "level": "system", "details": "Relationships in this view are not execution order." },
+        { "id": "intent", "x": 40, "y": 70, "label": "Know which beat is current", "subtitle": "Older tracked Play requests cannot take over", "level": "concept", "details": "The latest Web playback intent identifies the requested beat still allowed to become active.", "source": "src/features/playback/webPlaybackIntent.ts" },
+        { "id": "route", "x": 360, "y": 20, "label": "Know where the audio lives", "subtitle": "beat → Telegram message", "level": "concept", "details": "A local routing cache stores the Telegram message and media information needed to locate the MASTER.", "source": "src/features/playback/webPlaybackRoutingCache.ts" },
+        { "id": "focus", "x": 680, "y": 70, "label": "Prioritize the playing beat", "subtitle": "Playback gets Direct focus over background work", "level": "concept", "details": "The active Telegram message receives playback focus instead of background warm priority.", "source": "src/features/playback/webStartupPlaybackCoordinator.ts" },
+        { "id": "prepare", "x": 80, "y": 520, "label": "Prepare playable audio", "subtitle": "Reuse warm bytes or obtain what is missing", "level": "concept", "details": "Matching warm work is adopted or promoted instead of discarded and redownloaded.", "source": "src/features/playback/webPlaybackSource.ts" },
+        { "id": "continuity", "x": 640, "y": 520, "label": "Keep playback supplied", "subtitle": "Continue streaming from retained bytes", "level": "concept", "details": "The stream continues from the retained prefix byte offset rather than restarting at zero.", "source": "src/features/playback/webPlaybackSource.ts" },
+        { "id": "start-flow", "x": 360, "y": 700, "label": "Start Playback", "subtitle": "Open the actual execution sequence", "level": "flow", "details": "Enter this flow to see execution order.", "targetView": "playback-start" }
+      ],
+      "edges": [
+        { "id": "e-p-intent", "source": "playback", "target": "intent", "kind": "relationship" },
+        { "id": "e-p-route", "source": "playback", "target": "route", "kind": "relationship" },
+        { "id": "e-p-focus", "source": "playback", "target": "focus", "kind": "relationship" },
+        { "id": "e-p-prepare", "source": "playback", "target": "prepare", "kind": "relationship" },
+        { "id": "e-p-continuity", "source": "playback", "target": "continuity", "kind": "relationship" },
+        { "id": "e-flow-entry", "source": "playback", "target": "start-flow", "kind": "enter" }
+      ]
+    },
+    "playback-start": {
+      "id": "playback-start",
+      "title": "BeatGaler / Playback / Start Playback",
+      "kind": "sequence",
+      "nodes": [
+        { "id": "request", "x": 0, "y": 0, "label": "User chooses a beat", "subtitle": "Create a new current Play intent", "level": "flow", "details": "A new Web playback intent is created for the selected beat.", "source": "src/platform/webAdapter.ts · src/features/playback/webPlaybackIntent.ts" },
+        { "id": "route", "x": 0, "y": 155, "label": "BeatGaler resolves its audio route", "subtitle": "Use the cached beat → Telegram message mapping", "level": "flow", "details": "The Web adapter resolves the Telegram message from the playback routing cache.", "source": "src/platform/webAdapter.ts · src/features/playback/webPlaybackRoutingCache.ts" },
+        { "id": "source-manager", "x": 0, "y": 310, "label": "Playback source becomes ready", "subtitle": "Use the shared startup/playback coordinator", "level": "flow", "details": "The Web path resolves the shared coordinator/source manager and checks that the intent is still current.", "source": "src/platform/webAdapter.ts · src/features/playback/webStartupPlaybackCoordinator.ts" },
+        { "id": "focus", "x": 0, "y": 465, "label": "This beat gets playback priority", "subtitle": "Existing warm work is adopted or promoted when possible", "level": "flow", "details": "Matching prefetch work is promoted/adopted and the message receives playback focus.", "source": "src/features/playback/webPlaybackSource.ts · src/features/playback/webStartupPlaybackCoordinator.ts" },
+        { "id": "prepare", "x": 0, "y": 620, "label": "Playable bytes are prepared", "subtitle": "Reuse active playback, replay cache or a warm prefix when available", "level": "flow", "details": "The source manager reuses existing playable data or prepares MediaSource/Blob playback.", "source": "src/features/playback/webPlaybackSource.ts" },
+        { "id": "url", "x": 0, "y": 775, "label": "Browser receives a playable URL", "subtitle": "The beginning can be available before the full file", "level": "flow", "details": "MediaSource allows a playable URL to exist while later bytes are still arriving.", "source": "src/features/playback/webPlaybackSource.ts" },
+        { "id": "stream", "x": 0, "y": 930, "label": "Streaming continues from what is already retained", "subtitle": "offset = retained prefix byte length", "level": "flow", "details": "When a usable prefix exists, streaming continues at prefix.byteLength instead of byte zero.", "source": "src/features/playback/webPlaybackSource.ts" },
+        { "id": "recovery", "x": 360, "y": 155, "label": "If the route is stale, reconcile and retry", "subtitle": "Only for ROUTE_MISSING / MEDIA_UNAVAILABLE", "level": "operation", "details": "A recoverable route failure refreshes authoritative library state and retries with a repaired route.", "source": "src/platform/webAdapter.ts" },
+        { "id": "superseded", "x": 360, "y": 360, "label": "If a newer Play wins, stop this request", "subtitle": "Superseded tracked playback does not take over", "level": "operation", "details": "Intent checks prevent stale preparation from replacing the newest selected beat.", "source": "src/platform/webAdapter.ts · src/features/playback/webPlaybackIntent.ts" }
+      ],
+      "edges": [
+        { "id": "e-request-route", "source": "request", "target": "route", "kind": "sequence" },
+        { "id": "e-route-source", "source": "route", "target": "source-manager", "kind": "sequence" },
+        { "id": "e-source-focus", "source": "source-manager", "target": "focus", "kind": "sequence" },
+        { "id": "e-focus-prepare", "source": "focus", "target": "prepare", "kind": "sequence" },
+        { "id": "e-prepare-url", "source": "prepare", "target": "url", "kind": "sequence" },
+        { "id": "e-url-stream", "source": "url", "target": "stream", "kind": "sequence" },
+        { "id": "e-route-recovery", "source": "route", "target": "recovery", "kind": "branch", "label": "route failure" },
+        { "id": "e-recovery-route", "source": "recovery", "target": "route", "kind": "branch", "label": "repaired route" },
+        { "id": "e-source-superseded", "source": "source-manager", "target": "superseded", "kind": "branch", "label": "newer Play" }
+      ]
+    }
+  },
+  "evidence": [
+    "src/platform/webAdapter.ts",
+    "src/features/playback/webPlaybackIntent.ts",
+    "src/features/playback/webPlaybackRoutingCache.ts",
+    "src/features/playback/webStartupPlaybackCoordinator.ts",
+    "src/features/playback/webPlaybackSource.ts"
+  ]
+}
