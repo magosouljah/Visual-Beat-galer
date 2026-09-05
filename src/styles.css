@@ -57,22 +57,53 @@ select {
 }
 
 .status {
+  max-width: 52vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+.workspace {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+}
+
 .canvas {
+  min-width: 0;
   min-height: 0;
 }
 
-.react-flow__node-default {
-  min-width: 180px;
-  padding: 18px 22px;
+.react-flow__node-default,
+.visual-node {
+  min-width: 230px;
+  max-width: 280px;
+  padding: 16px 18px;
   border: 1px solid #3a414a;
   border-radius: 14px;
   background: #171b20;
   color: #f5f7fa;
   font-weight: 650;
   box-shadow: none;
+  text-align: left;
+}
+
+.visual-node--system {
+  min-width: 260px;
+  font-size: 18px;
+}
+
+.visual-node--flow {
+  font-size: 14px;
+}
+
+.react-flow__node.selected {
+  border-color: #dbe1e8;
+}
+
+.react-flow__edge-path {
+  stroke: #4c5663;
+  stroke-width: 1.5;
 }
 
 .react-flow__controls {
@@ -86,4 +117,63 @@ select {
   border-bottom-color: #2c3239;
   background: #15191e;
   fill: #dbe1e8;
+}
+
+.inspector {
+  width: min(360px, 38vw);
+  padding: 24px;
+  border-left: 1px solid #20242a;
+  background: #111418;
+  overflow-y: auto;
+}
+
+.inspector h2 {
+  margin: 8px 0 6px;
+  font-size: 22px;
+}
+
+.inspector p {
+  color: #c4cbd3;
+  line-height: 1.55;
+}
+
+.inspector .subtitle {
+  margin-top: 0;
+  color: #8f98a3;
+}
+
+.eyebrow,
+.source-ref span {
+  display: block;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #7f8994;
+}
+
+.source-ref {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid #252a31;
+}
+
+.source-ref code {
+  display: block;
+  margin-top: 8px;
+  color: #e6ebf0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 800px) {
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+
+  .inspector {
+    width: auto;
+    max-height: 38vh;
+    border-left: 0;
+    border-top: 1px solid #20242a;
+  }
 }
