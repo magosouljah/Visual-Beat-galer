@@ -5,7 +5,7 @@ export type VisualLevel = 'product' | 'system' | 'concept' | 'flow' | 'operation
 export type VisualViewId = 'beatgaler' | 'playback' | 'playback-start'
 export type VisualMapKind = 'overview' | 'relationships' | 'sequence'
 
-type GeneratedEdgeKind = 'relationship' | 'enter' | 'sequence' | 'branch'
+type GeneratedEdgeKind = 'relationship' | 'dependency' | 'enter' | 'sequence' | 'branch'
 
 interface GeneratedNode {
   id: string
@@ -70,12 +70,12 @@ if (model.schemaVersion !== 1) {
 }
 
 function edgeFromGenerated(edge: GeneratedEdge): Edge {
-  if (edge.kind === 'sequence') {
+  if (edge.kind === 'sequence' || edge.kind === 'dependency') {
     return {
       id: edge.id,
       source: edge.source,
       target: edge.target,
-      className: 'sequence-edge',
+      className: edge.kind === 'sequence' ? 'sequence-edge' : 'dependency-edge',
       markerEnd: { type: MarkerType.ArrowClosed },
       label: edge.label,
     }
