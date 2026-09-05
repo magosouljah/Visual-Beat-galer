@@ -84,18 +84,18 @@ const playbackSystemMap: VisualMap = {
   nodes: [
     {
       id: 'playback',
-      position: { x: 340, y: 0 },
+      position: { x: 340, y: 285 },
       data: {
         label: 'Playback',
         subtitle: 'Turn a Play request into continuous audio',
         level: 'system',
-        details: 'These lines show parts of Playback and how they depend on one another. They do not mean execution order.',
+        details: 'This view shows the real responsibilities that make Web Playback work. Position and lines here are not execution order. Enter Start Playback to see time/order.',
       },
       draggable: false,
     },
     {
       id: 'intent',
-      position: { x: 0, y: 205 },
+      position: { x: 0, y: 70 },
       data: {
         label: 'Know which beat is current',
         subtitle: 'Older tracked Play requests cannot take over',
@@ -107,7 +107,7 @@ const playbackSystemMap: VisualMap = {
     },
     {
       id: 'route',
-      position: { x: 340, y: 205 },
+      position: { x: 340, y: 0 },
       data: {
         label: 'Know where the audio lives',
         subtitle: 'beat → Telegram message',
@@ -119,7 +119,7 @@ const playbackSystemMap: VisualMap = {
     },
     {
       id: 'focus',
-      position: { x: 680, y: 205 },
+      position: { x: 680, y: 70 },
       data: {
         label: 'Prioritize the playing beat',
         subtitle: 'Playback gets Direct focus over background work',
@@ -131,7 +131,7 @@ const playbackSystemMap: VisualMap = {
     },
     {
       id: 'prepare',
-      position: { x: 170, y: 420 },
+      position: { x: 35, y: 490 },
       data: {
         label: 'Prepare playable audio',
         subtitle: 'Reuse warm bytes or obtain what is missing',
@@ -143,7 +143,7 @@ const playbackSystemMap: VisualMap = {
     },
     {
       id: 'continuity',
-      position: { x: 510, y: 420 },
+      position: { x: 645, y: 490 },
       data: {
         label: 'Keep playback supplied',
         subtitle: 'Continue streaming from retained bytes',
@@ -155,7 +155,7 @@ const playbackSystemMap: VisualMap = {
     },
     {
       id: 'start-flow',
-      position: { x: 340, y: 655 },
+      position: { x: 340, y: 690 },
       data: {
         label: 'Start Playback',
         subtitle: 'Open the actual execution sequence',
@@ -170,10 +170,8 @@ const playbackSystemMap: VisualMap = {
     relationship('e-p-intent', 'playback', 'intent'),
     relationship('e-p-route', 'playback', 'route'),
     relationship('e-p-focus', 'playback', 'focus'),
-    relationship('e-intent-prepare', 'intent', 'prepare'),
-    relationship('e-route-prepare', 'route', 'prepare'),
-    relationship('e-focus-prepare', 'focus', 'prepare'),
-    relationship('e-prepare-continuity', 'prepare', 'continuity'),
+    relationship('e-p-prepare', 'playback', 'prepare'),
+    relationship('e-p-continuity', 'playback', 'continuity'),
     enter('e-flow-entry', 'playback', 'start-flow'),
   ],
 }
