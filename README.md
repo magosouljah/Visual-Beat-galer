@@ -6,7 +6,14 @@ The app translates BeatGaler's current implementation into a navigable visual mo
 
 ## Current stage
 
-Stage 3 has started: Playback is no longer rendered from a hand-written React Flow model. The viewer reads `src/generated/beatgaler-map.json`, and `scripts/analyze-beatgaler.mjs` can regenerate that file from a local BeatGaler checkout after verifying concrete code evidence.
+Stage 3 is building the analyzer. The viewer reads `src/generated/beatgaler-map.json`, and `scripts/analyze-beatgaler.mjs` regenerates that disposable model from a local BeatGaler checkout.
+
+The analyzer now has two layers:
+
+- **repository inventory:** discovers real code areas from the current checkout (`src/features/*`, platform code, Tauri/Desktop, and detected service directories) and counts their actual code files;
+- **validated semantic slice:** Playback has a deeper map only because the analyzer verifies concrete implementation evidence for that path.
+
+A discovered directory is **not automatically called a canonical architecture**. The global map shows that the code area exists. Deeper semantic meaning is added only when supported by stronger evidence.
 
 The analyzer is intentionally conservative. If expected Playback evidence disappears, it fails instead of inventing a replacement map.
 
@@ -23,6 +30,7 @@ Pass the local BeatGaler repository path:
 
 ```bash
 npm run analyze -- "C:\path\to\BeatGaler"
+npm run build
 npm run dev
 ```
 
@@ -30,15 +38,9 @@ Or set `BEATGALER_REPO` and run `npm run analyze`.
 
 The generated file is disposable. If the map is wrong, fix the analyzer or BeatGaler; do not hand-edit the generated JSON as architectural truth.
 
-## Build
+## Current semantic scope
 
-```bash
-npm run build
-```
-
-## Current analyzer scope
-
-The first vertical slice is Web Playback. It verifies and maps evidence from:
+The first deep vertical slice is Web Playback. It verifies evidence from:
 
 - `src/platform/webAdapter.ts`
 - `src/features/playback/webPlaybackIntent.ts`
@@ -46,4 +48,4 @@ The first vertical slice is Web Playback. It verifies and maps evidence from:
 - `src/features/playback/webStartupPlaybackCoordinator.ts`
 - `src/features/playback/webPlaybackSource.ts`
 
-This is not yet a general automatic architecture discovery engine. It is the first deterministic analyzer slice used to prove that a trusted generated model can replace the manually maintained Playback map.
+Other discovered code areas currently appear in the global map as factual repository inventory. They are not yet given invented flows or dependencies.
