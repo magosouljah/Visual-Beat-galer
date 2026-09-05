@@ -14,6 +14,12 @@ const viewLabels: Record<VisualViewId, string> = {
   'playback-start': 'Start Playback',
 }
 
+const mapKindLabel = {
+  overview: 'Map',
+  relationships: 'Relationships · not execution order',
+  sequence: 'Execution flow · arrows show order',
+} as const
+
 function nodeClassName(node: Node<VisualNodeData>) {
   return `visual-node visual-node--${node.data.level}${node.data.targetView ? ' visual-node--enterable' : ''}`
 }
@@ -61,14 +67,15 @@ export function App() {
 
       <section className="workspace">
         <section className="canvas" aria-label="BeatGaler visual map">
+          <div className={`map-kind map-kind--${map.kind}`}>{mapKindLabel[map.kind]}</div>
           <ReactFlow
             key={viewId}
             nodes={nodes}
             edges={map.edges}
             fitView
             fitViewOptions={{ padding: 0.28 }}
-            minZoom={0.4}
-            maxZoom={1.9}
+            minZoom={0.35}
+            maxZoom={2}
             nodesDraggable={false}
             nodesConnectable={false}
             elementsSelectable
