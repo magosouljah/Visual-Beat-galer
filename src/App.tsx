@@ -15,7 +15,7 @@ const viewLabels: Record<VisualViewId, string> = {
 }
 
 const mapKindLabel = {
-  overview: 'Map',
+  overview: 'Code dependencies · arrows mean direct imports',
   relationships: 'Relationships · not execution order',
   sequence: 'Execution flow · arrows show order',
 } as const
