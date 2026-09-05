@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Background, Controls, ReactFlow, type Node } from '@xyflow/react'
-import { visualMaps, type VisualNodeData, type VisualViewId } from './model/playbackModel'
+import { modelMetadata, visualMaps, type VisualNodeData, type VisualViewId } from './model/playbackModel'
 
 const viewTrail: Record<VisualViewId, VisualViewId[]> = {
   beatgaler: ['beatgaler'],
@@ -62,7 +62,9 @@ export function App() {
             ))}
           </nav>
         </div>
-        <span className="status">{map.sourceRef}</span>
+        <span className="status">
+          {modelMetadata.generated ? 'Generated · ' : 'Bootstrap snapshot · '}{map.sourceRef}
+        </span>
       </header>
 
       <section className="workspace">
