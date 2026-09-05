@@ -199,6 +199,11 @@ button {
   stroke: #414a55;
 }
 
+.dependency-edge .react-flow__edge-path {
+  stroke: #687482;
+  stroke-width: 1.55;
+}
+
 .enter-edge .react-flow__edge-path {
   stroke: #737f8d;
   stroke-dasharray: 6 6;
