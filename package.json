@@ -1,9 +1,10 @@
 {
   "name": "visual-beat-galer",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "type": "module",
   "scripts": {
+    "analyze": "node scripts/analyze-beatgaler.mjs",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
